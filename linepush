@@ -16,6 +16,11 @@ fi
 
 message=$1
 
+if [ -z "$message" ]; then
+    echo "Message is not set, use: linepush \"message\""
+    exit 1
+fi
+
 curl -X POST https://api.line.me/v2/bot/message/push \
      -H "Content-Type: application/json" \
      -H "Authorization: Bearer ${LINEPUSH_CHANNEL_ACCESS_TOKEN}" \
