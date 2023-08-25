@@ -1,23 +1,41 @@
 import os
 import dbus
 import json
+import requests
 
 from gi.repository import GLib
 from dbus.mainloop.glib import DBusGMainLoop
 
+url = "https://api.line.me/v2/bot/message/push"
 user_id = os.getenv('LINEPUSH_USER_ID')
 channel_access_token = os.getenv('LINEPUSH_CHANNEL_ACCESS_TOKEN')
+
+#print(user_id, channel_access_token)
 
 if not user_id or not channel_access_token:
 	print('Please set LINEPUSH_USER_ID and LINEPUSH_CHANNEL_ACCESS_TOKEN')
 	exit(1)
 
+def linepush(text):
+	payload = {
+		"to": user_id,
+		"messages": [{"type": "text", "text": text}]
+	}
+	headers = {
+		"Content-Type": "application/json",
+		"Authorization": f"Bearer {channel_access_token}"
+	}
+	response = requests.post(url, json=payload, headers=headers)
+	if response.status_code != 200:
+		print("Errore nell'invio del messaggio:", response.text)
+
 def notifications(bus, message):
 	args = message.get_args_list()
 	if args and len(args) >= 2:
-		print(json.dumps(args, indent=4))
-		body = args[3]  # Supponiamo che il messaggio testuale sia nel quarto argomento (indice 3)
-		print("Messaggio:", body)
+		#print(json.dumps(args, indent=4))
+		text = args[4]
+		print("Send:", text)
+		linepush(text)
 
 DBusGMainLoop(set_as_default=True)
 
