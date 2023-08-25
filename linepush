@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -e
+
+#echo "User: ${LINEPUSH_USER_ID}"
+#echo "Token: ${LINEPUSH_CHANNEL_ACCESS_TOKEN}"
+
+message=$1
+
+curl -X POST https://api.line.me/v2/bot/message/push \
+     -H "Content-Type: application/json" \
+     -H "Authorization: Bearer ${LINEPUSH_CHANNEL_ACCESS_TOKEN}" \
+     -d "{\"to\":\"${LINEPUSH_USER_ID}\",\"messages\":[{\"type\":\"text\",\"text\":\"$message\"}]}"
+
+echo ""
+
