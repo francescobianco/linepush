@@ -9,6 +9,7 @@ from dbus.mainloop.glib import DBusGMainLoop
 url = "https://api.line.me/v2/bot/message/push"
 user_id = os.getenv('LINEPUSH_USER_ID')
 channel_access_token = os.getenv('LINEPUSH_CHANNEL_ACCESS_TOKEN')
+last_text = None
 
 #print(user_id, channel_access_token)
 
@@ -33,9 +34,13 @@ def notifications(bus, message):
 	args = message.get_args_list()
 	if args and len(args) >= 2:
 		#print(json.dumps(args, indent=4))
-		text = args[4]
-		print("Send:", text)
-		linepush(text)
+		title = " ".join(args[3].split())
+		body = " ".join(args[4].split())
+		text = title
+		if last_text != text:
+			last_text = text
+			print("Send:", text)
+			linepush(text)
 
 DBusGMainLoop(set_as_default=True)
 
