@@ -4,6 +4,16 @@ set -e
 #echo "User: ${LINEPUSH_USER_ID}"
 #echo "Token: ${LINEPUSH_CHANNEL_ACCESS_TOKEN}"
 
+if [ -z "$LINEPUSH_USER_ID" ]; then
+    echo "LINEPUSH_USER_ID is not set"
+    exit 1
+fi
+
+if [ -z "$LINEPUSH_CHANNEL_ACCESS_TOKEN" ]; then
+    echo "LINEPUSH_CHANNEL_ACCESS_TOKEN is not set"
+    exit 1
+fi
+
 message=$1
 
 curl -X POST https://api.line.me/v2/bot/message/push \
@@ -12,4 +22,3 @@ curl -X POST https://api.line.me/v2/bot/message/push \
      -d "{\"to\":\"${LINEPUSH_USER_ID}\",\"messages\":[{\"type\":\"text\",\"text\":\"$message\"}]}"
 
 echo ""
-
