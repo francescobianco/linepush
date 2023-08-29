@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 set -e
 
-#echo "User: ${LINEPUSH_USER_ID}"
-#echo "Token: ${LINEPUSH_CHANNEL_ACCESS_TOKEN}"
+linepush_file="$HOME/.linepush"
+
+touch "$linepush_file"
+source "$linepush_file"
 
 if [ -z "$LINEPUSH_USER_ID" ]; then
     echo "LINEPUSH_USER_ID is not set"
